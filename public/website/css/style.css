@@ -8417,6 +8417,16 @@ textarea.form-control {
     display: none;
 }
 
+.background-c3{
+    background-color:#c3c3c3;
+}
+.map-style{
+    position: absolute;
+    width:100%;
+    height:450px;
+    top:20%;
+    overflow: hidden;
+}
 /*.error-message
 {
     position: absolute;

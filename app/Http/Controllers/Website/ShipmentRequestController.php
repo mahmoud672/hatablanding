@@ -48,6 +48,8 @@ class ShipmentRequestController extends Controller
             $shipment->feedback         = $request->feedback;
             $shipment->vendor_name      = $request->vendor_name;
             $shipment->notes            = $request->notes;
+            $shipment->latitude         = $request->latitude;
+            $shipment->longitude        = $request->longitude;
             $shipment->save();
 
             return back()->with("create","تم ارسال طلبك بنجاح");

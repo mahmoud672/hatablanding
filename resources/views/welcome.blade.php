@@ -50,11 +50,19 @@
                                                 @error("phone")<span class="error text-danger error-message">{{ $message }}</span> @enderror
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group">
-                                                <label class="label" for="subject">العنوان</label>
+                                                <label class="label" for="address">العنوان</label>
                                                 <input type="text" class="form-control" name="address" id="address" placeholder="أكتب العنوان" value="{{ old("address") }}">
                                                 @error("address")<span class="error text-danger error-message">{{ $message }}</span> @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="hidden" name="latitude" id="latitude" value="">
+                                                <input type="hidden" name="longitude" id="longitude" value="">
+                                                <button class="btn btn-light background-c3" id="pick_location" title="اضغط هنا لتحديد موقعك على الخريطة"><i class="fa fa-map-pin text-danger" title="اضغط هنا لتحديد موقعك على الخريطة"></i></button>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -107,7 +115,7 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                {{--<label class="label" for="have_sample">اختر تقييمك</label>--}}
+                                                <label class="label" for="have_sample">اختر تقييمك</label>
                                                 <div class="rate">
                                                     <input type="radio" id="star5" name="rate" value="5" />
                                                     <label for="star5" title="5"></label>
@@ -126,7 +134,7 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label class="label" for="feedback">تقييم</label>
+                                                <label class="label" for="feedback">تعليق</label>
                                                 <input type="text" class="form-control" name="feedback" id="feedback" placeholder="أكتب التعليق" value="{{ old("feedback") }}">
                                                 @error("feedback")<span class="error text-danger error-message">{{ $message }}</span> @enderror
                                             </div>
@@ -165,8 +173,9 @@
                             </div>
                         </div>
                         <div class="col-md-5 d-flex align-items-stretch">
-                            <div class="info-wrap w-100 p-5 img" style="background-image: url({{ asset("website/images/woods.jpg") }});">
-                            </div>
+                            <div class="info-wrap w-100 p-5 img" style="background-image: url({{ asset("website/images/woods.jpg") }});"></div>
+                            <div id="map" class="map-style"></div>
+
                         </div>
 
                     </div>
@@ -212,6 +221,13 @@
                             </div>
                         </div>
                     </div>
+
+                    {{--<p>Click the button to get your coordinates.</p>
+
+                    <button onclick="getLocation()">Try It</button>
+
+                    <p id="demo"></p>--}}
+                    {{--<div id="map" style="width:600px;height:300px"></div>--}}
                 </div>
             </div>
         </div>
@@ -220,11 +236,71 @@
 
 
 <script src="{{asset("website/js/jquery.min.js")}}"></script>
+
 <script src="{{asset("website/js/popper.js")}}"></script>
 <script src="{{asset("website/js/bootstrap.bundle.min.js")}}"></script>
 <script src="{{asset("website/js/jquery.validate.min.js")}}"></script>
 <script src="{{asset("website/js/main.js")}}"></script>
 <script src="{{asset("website/js/plugin.js")}}"></script>
+<script language=javascript src='https://maps.google.com/maps/api/js?sensor=false'></script>
+
+
+<script>
+    //var x = document.getElementById("demo");
+    $("#pick_location").on('click',function (event){
+        event.preventDefault();
+        getLocation();
+    });
+
+    function getLocation() {
+        //console.log(navigator.geolocation.getCurrentPosition(latitude))
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            //x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        $("#longitude").val(position.coords.longitude);
+        $("#latitude").val(position.coords.latitude);
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+       /* x.innerHTML = "Latitude: " + position.coords.latitude +
+            "<br>Longitude: " + position.coords.longitude;*/
+    }
+
+
+
+     function successCallback(position){
+        console.log(position);
+
+        initialize(position.coords.latitude,position.coords.longitude);
+         //google.maps.event.addDomListener(window,'load',in);
+        return  position;
+    }
+
+    const errorCallback = (error) => {
+        console.log(error);
+    };
+
+    //navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+
+
+    function initialize(la,lo){
+        var latlon = new google.maps.LatLng(la,lo);
+        var myOptions={
+            center:latlon,zoom:14,
+            mapTypeId:google.maps.MapTypeId.ROADMAP,
+            mapTypeControl:false,
+            navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+        };
+        var map = new google.maps.Map(document.getElementById("map"), myOptions);
+        var marker=new google.maps.Marker({position:latlon,map:map,title:"You are here!"});
+        //google.maps.event.addDomListener(window,'load', myOptions);
+    }
+
+    //google.maps.event.addDomListener(window,'load', initialize);
+</script>
 
 </body>
 </html>
