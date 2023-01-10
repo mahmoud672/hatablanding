@@ -62,7 +62,10 @@
                                             <div class="form-group">
                                                 <input type="hidden" name="latitude" id="latitude" value="">
                                                 <input type="hidden" name="longitude" id="longitude" value="">
-                                                <button class="btn btn-light background-c3" id="pick_location" title="اضغط هنا لتحديد موقعك على الخريطة"><i class="fa fa-map-pin text-danger" title="اضغط هنا لتحديد موقعك على الخريطة"></i></button>
+                                                <button class="btn btn-light background-c3" id="pick_location" title="اضغط هنا لتحديد موقعك على الخريطة">
+                                                    <span> تحديد موقعك </span>
+                                                    <i class="fa fa-map-pin text-danger" title="اضغط هنا لتحديد موقعك على الخريطة"></i>
+                                                </button>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
